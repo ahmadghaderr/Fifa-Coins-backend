@@ -1,19 +1,13 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-# Import routers relatively (routes inside server/)
-from .routes.user_routes import router as user_router
-from .routes.login_routes import router as login_router
-from .routes.calculation_routes import router as calculation_router
-from .routes.rate_routes import router as rate_router
-from .routes.calculation_history_routes import router as history_router
+from server.routes.user_routes import router as user_router
+from server.routes.login_routes import router as login_router
+from server.routes.calculation_routes import router as calculation_router
+from server.routes.rate_routes import router as rate_router
+from server.routes.calculation_history_routes import router as history_router
 
-# Import database client relatively if database.py is inside server/
-# Otherwise adjust the import accordingly. 
-# If database.py is at project root, you might do:
-from ..database import client  # If database.py is outside server folder
-# OR if database.py is inside server:
-# from .database import client
+from server.database import client
 
 app = FastAPI()
 
