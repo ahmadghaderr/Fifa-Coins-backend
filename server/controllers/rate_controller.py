@@ -1,7 +1,7 @@
 from fastapi import HTTPException
 from bson import ObjectId
 
-from ..database import database, get_current_rate, set_current_rate
+from server.database import database, get_current_rate, set_current_rate
 
 async def get_rate_controller():
     rate = await get_current_rate()
