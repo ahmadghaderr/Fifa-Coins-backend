@@ -1,12 +1,15 @@
 from fastapi import APIRouter, HTTPException, Header
 
-from controllers.user_controller import (
+# Relative import from controllers inside server package
+from ..controllers.user_controller import (
     handle_signup,
     get_user_by_id,
     get_all_users,
     delete_user_by_id
 )
-from models.user_model import SignupData
+
+# Relative import from models inside server package
+from ..models.user_model import SignupData
 
 router = APIRouter()
 
@@ -41,9 +44,8 @@ async def read_all_users(token: str):
 async def delete_user(id: str, token: str):
     try:
         await delete_user_by_id(id, token)
-        return {"message": "User {id} deleted successfully."}
+        return {"message": f"User {id} deleted successfully."}
     except HTTPException:
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
-
