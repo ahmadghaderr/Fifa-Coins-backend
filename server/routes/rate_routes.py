@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException, Depends
-from controllers.rate_controller import get_rate_controller, update_rate_controller
-from utils.auth import get_current_user_id
+
+from ..controllers.rate_controller import get_rate_controller, update_rate_controller
+from ..utils.auth import get_current_user_id
 
 router = APIRouter()
 
