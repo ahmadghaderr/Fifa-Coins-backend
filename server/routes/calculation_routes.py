@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends
 
-from ..models.calculation_model import CalculationInput
-from ..utils.auth import get_current_user_id
-from ..controllers.calculation_controller import calculate_profit
+from server.models.calculation_model import CalculationInput
+from server.utils.auth import get_current_user_id
+from server.controllers.calculation_controller import calculate_profit
 
 router = APIRouter()
 
