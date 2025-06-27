@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException
-from models.user_model import LoginData
-from controllers.user_controller import handle_login
+
+from ..models.user_model import LoginData
+from ..controllers.user_controller import handle_login
 
 router = APIRouter()
 
