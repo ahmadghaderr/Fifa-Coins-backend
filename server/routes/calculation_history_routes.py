@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 
-from ..utils.auth import get_current_user_id
-from ..controllers.calculation_history_controller import (
+from server.utils.auth import get_current_user_id
+from server.controllers.calculation_history_controller import (
     get_user_calculation_history,
     get_user_total_profit,
     delete_calculation,
