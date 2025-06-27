@@ -1,8 +1,8 @@
 from fastapi import HTTPException
 
-from ..models.user_model import LoginData
-from ..database import users_collection
-from ..utils.auth import verify_password, create_token
+from server.models.user_model import LoginData
+from server.database import users_collection
+from server.utils.auth import verify_password, create_token
 
 async def handle_login(login_data: LoginData):
     user = await users_collection.find_one({"email": login_data.email})
