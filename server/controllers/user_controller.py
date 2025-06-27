@@ -1,6 +1,6 @@
-from ..models.user_model import SignupData
-from ..utils.auth import hash_password, verify_password, create_token, decode_token
-from ..database import users_collection
+from server.models.user_model import SignupData
+from server.utils.auth import hash_password, verify_password, create_token, decode_token
+from server.database import users_collection
 
 from bson import ObjectId
 from fastapi import HTTPException
