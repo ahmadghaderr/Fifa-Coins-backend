@@ -1,6 +1,6 @@
-from models.calculation_model import CalculationInput
-from models.calculation_history_model import HistoryEntry
-from database import get_current_rate, database
+from ..models.calculation_model import CalculationInput
+from ..models.calculation_history_model import HistoryEntry
+from ..database import get_current_rate, database
 from fastapi import HTTPException
 from datetime import datetime
 from zoneinfo import ZoneInfo  # Python 3.9+
