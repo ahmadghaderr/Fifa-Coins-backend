@@ -1,7 +1,7 @@
 from fastapi import HTTPException
 from bson import ObjectId
 
-from ..database import database
+from server.database import database
 
 async def get_user_calculation_history(user_id: str):
     history = await database["calculation_history"].find({"user_id": user_id}).to_list(1000)
