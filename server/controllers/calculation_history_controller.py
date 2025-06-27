@@ -1,6 +1,7 @@
 from fastapi import HTTPException
-from database import database
 from bson import ObjectId
+
+from ..database import database
 
 async def get_user_calculation_history(user_id: str):
     history = await database["calculation_history"].find({"user_id": user_id}).to_list(1000)
@@ -37,7 +38,6 @@ async def delete_calculation(calculation_id: str, user_id: str):
     await database["calculation_history"].delete_one({"_id": ObjectId(calculation_id)})
 
     return {"message": f"Calculation for player '{player_name}' deleted successfully"}
-
 
 async def mark_calculation_as_paid(calculation_id: str, user_id: str):
     record = await database["calculation_history"].find_one({"_id": ObjectId(calculation_id)})
