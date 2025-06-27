@@ -1,15 +1,13 @@
 from fastapi import APIRouter, HTTPException, Header
 
-# Relative import from controllers inside server package
-from ..controllers.user_controller import (
+from server.controllers.user_controller import (
     handle_signup,
     get_user_by_id,
     get_all_users,
     delete_user_by_id
 )
 
-# Relative import from models inside server package
-from ..models.user_model import SignupData
+from server.models.user_model import SignupData
 
 router = APIRouter()
 
