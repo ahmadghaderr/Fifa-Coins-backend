@@ -3,13 +3,13 @@ import re
 from dotenv import load_dotenv
 import google.generativeai as genai
 from fastapi import HTTPException
-from database import get_current_rate
+from server.database import get_current_rate
 
 load_dotenv()
 api_key = os.getenv("GOOGLE_API_KEY")
 
 if not api_key:
-    raise HTTPException(status_code=500, detail="GOOGLE_API_KEY missing")
+    raise RuntimeError("GOOGLE_API_KEY is missing — set it in Render environment variables")
 
 genai.configure(api_key=api_key)
 
@@ -29,7 +29,7 @@ async def handle_chatbot_message(message: str, is_first_message: bool = False) -
             "How can I assist you today?"
         )
 
-    if msg_lower in ["great","oh okay", "thanks", "thank you", "good", "nice"]:
+    if msg_lower in ["great", "oh okay", "thanks", "thank you", "good", "nice"]:
         return "Glad to hear that! Do you need any more help?"
 
     if msg_lower in ["hi", "hello", "hey", "hi there", "hello there", "what can you do", "what do you do", "help"]:
@@ -114,8 +114,7 @@ async def handle_chatbot_message(message: str, is_first_message: bool = False) -
                     "You can also do this calculation directly on our website for faster results, "
                     "and your calculations will be saved in your history automatically!"
                 )
-            except Exception as e:
-                print("Profit Calculation Error:", type(e), e)
+            except Exception:
                 return "There was an error processing your profit calculation. Please try again."
         else:
             return (
@@ -145,8 +144,7 @@ async def handle_chatbot_message(message: str, is_first_message: bool = False) -
         try:
             response = model.generate_content(prompt)
             return response.text.strip()
-        except Exception as e:
-            print("AI API Error:", type(e), e)
+        except Exception:
             return "Sorry, I couldn't process that right now. Please try again later."
 
     rate = await get_current_rate()
@@ -156,7 +154,7 @@ async def handle_chatbot_message(message: str, is_first_message: bool = False) -
         "You are a helpful assistant for the FIFA Coins website.\n"
         "You can only answer questions about: coin rate, profit calculation, and calculation history.\n"
         "If the user asks about profit, always include both the coin profit and the money profit.\n"
-        "Money profit is calculated as: (coin profit / 1,000,000) × rate.\n"    
+        "Money profit is calculated as: (coin profit / 1,000,000) × rate.\n"
         f"The current coin rate is {rate_str}\n"
     )
 
@@ -164,6 +162,5 @@ async def handle_chatbot_message(message: str, is_first_message: bool = False) -
     try:
         response = model.generate_content(prompt)
         return response.text.strip()
-    except Exception as e:
-        print("AI API Error:", type(e), e)
+    except Exception:
         return "Sorry, I couldn't process that right now. Please try again later."
