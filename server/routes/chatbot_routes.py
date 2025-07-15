@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
-from controllers.chatbot_controller import handle_chatbot_message
+from server.controllers.chatbot_controller import handle_chatbot_message
 
 router = APIRouter()
 
