@@ -1,5 +1,5 @@
 from pydantic import BaseModel, EmailStr, Field
-from typing import Literal
+from typing import Literal , Optional
 from uuid import uuid4
 
 class SignupData(BaseModel):
@@ -20,3 +20,9 @@ class UserInDB(BaseModel):
 class LoginData(BaseModel):
     email: EmailStr
     password: str
+    
+class UpdateUserData(BaseModel):
+    username:(Optional)[str]
+    email:(Optional)[EmailStr]
+    password:(Optional)[str]
+    phone:(Optional)[str]
