@@ -6,7 +6,6 @@ from bson import ObjectId
 from fastapi import HTTPException
 from jose import JWTError
 
-# User signup
 async def handle_signup(user: SignupData):
     existing_user = await users_collection.find_one({
         "$or": [{"email": user.email}, {"username": user.username}]
@@ -39,8 +38,8 @@ async def handle_signup(user: SignupData):
         "access_token": token
     }
 
-# Login handler
-async def handle_login(login_data):
+
+async def handle_login(login_data: LoginData):
     user = await users_collection.find_one({"email": login_data.email})
     if not user:
         raise HTTPException(status_code=401, detail="Invalid email or password.")
@@ -55,11 +54,13 @@ async def handle_login(login_data):
     }
     token = create_token(token_data)
     return {
-        "access_token": token,
-        "user_id": token_data["user_id"]
+        "message": "Login successful",
+        "user_id": str(user["_id"]),
+        "username": user["username"],
+        "access_token": token
     }
+    
 
-# Get user by ID
 async def get_user_by_id(user_id: str):
     try:
         obj_id = ObjectId(user_id)
@@ -86,7 +87,6 @@ async def get_user_by_id(user_id: str):
 
     raise HTTPException(status_code=404, detail="User not found.")
 
-# Get all users (admin only)
 async def get_all_users(token: str):
     try:
         payload = decode_token(token)
@@ -107,8 +107,55 @@ async def get_all_users(token: str):
             "role": user.get("role", "")
         })
     return users
+async def edit_user_by_id(user_id: str, update_data: UpdateUserData):
+    update_fields = {}
 
-# Delete user by ID (admin only)
+    if update_data.username:
+        update_fields["username"] = update_data.username
+
+    if update_data.email:
+        update_fields["email"] = update_data.email
+
+    if update_data.password:
+        update_fields["hashed_password"] = hash_password(update_data.password)
+
+    if update_data.phone:
+        update_fields["phone"] = update_data.phone
+
+    if not update_fields:
+        raise HTTPException(status_code=400, detail="No fields to update.")
+
+    try:
+        obj_id = ObjectId(user_id)
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid user ID format.")
+
+    if "email" in update_fields:
+        existing_email = await users_collection.find_one({
+            "email": update_fields["email"],
+            "_id": {"$ne": obj_id}
+        })
+        if existing_email:
+            raise HTTPException(status_code=400, detail="Email is already in use.")
+
+    if "username" in update_fields:
+        existing_username = await users_collection.find_one({
+            "username": update_fields["username"],
+            "_id": {"$ne": obj_id}
+        })
+        if existing_username:
+            raise HTTPException(status_code=400, detail="Username is already in use.")
+
+    result = await users_collection.update_one(
+        {"_id": obj_id},
+        {"$set": update_fields}
+    )
+
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="User not found.")
+
+    return {"message": "User information updated successfully."}    
+
 async def delete_user_by_id(user_id: str, token: str):
     try:
         payload = decode_token(token)
@@ -127,4 +174,4 @@ async def delete_user_by_id(user_id: str, token: str):
     if delete_result.deleted_count == 0:
         raise HTTPException(status_code=404, detail="User not found.")
 
-    return True
+    return {"message": "User deleted successfully."}
