@@ -7,7 +7,6 @@ from fastapi.middleware.cors import CORSMiddleware
 sys.path.append(str(Path(__file__).parent.parent))
 
 from server.routes.user_routes import router as user_router
-from server.routes.login_routes import router as login_router
 from server.routes.calculation_routes import router as calculation_router
 from server.routes.rate_routes import router as rate_router
 from server.routes.calculation_history_routes import router as history_router
@@ -30,7 +29,6 @@ app.add_middleware(
 )
 
 app.include_router(user_router, prefix="/api/user")
-app.include_router(login_router, prefix="/api")
 app.include_router(calculation_router, prefix="/api")
 app.include_router(rate_router, prefix="/api")
 app.include_router(history_router, prefix="/api/history")
@@ -48,3 +46,4 @@ async def shutdown_db_client():
 @app.get("/")
 async def root():
     return {"message": "Hello, FastAPI with MongoDB and Chatbot is running 🚀"}
+
