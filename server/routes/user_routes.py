@@ -4,7 +4,8 @@ from server.controllers.user_controller import (
     handle_signup,
     get_user_by_id,
     get_all_users,
-    delete_user_by_id
+    delete_user_by_id,
+    edit_user_by_id
 )
 
 from server.models.user_model import SignupData
@@ -38,6 +39,20 @@ async def read_all_users(token: str):
             detail=f"An error occurred: {str(e)}",
         )
 
+@router.put("/edit/{id}")
+async def edit_user(id: str, update_data: UpdateUserData):
+    try:
+        result = await edit_user_by_id(id, update_data)
+        return result
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"An error occurred: {str(e)}",
+        )
+
+
 @router.delete("/delete/{id}")
 async def delete_user(id: str, token: str):
     try:
@@ -47,3 +62,4 @@ async def delete_user(id: str, token: str):
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
+
