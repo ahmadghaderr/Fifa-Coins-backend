@@ -1,4 +1,4 @@
-from server.models.user_model import SignupData
+from server.models.user_model import SignupData, UpdateUserData, LoginData
 from server.utils.auth import hash_password, verify_password, create_token, decode_token
 from server.database import users_collection
 
@@ -175,3 +175,4 @@ async def delete_user_by_id(user_id: str, token: str):
         raise HTTPException(status_code=404, detail="User not found.")
 
     return {"message": "User deleted successfully."}
+
