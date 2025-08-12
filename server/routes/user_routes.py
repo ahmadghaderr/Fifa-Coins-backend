@@ -8,7 +8,7 @@ from server.controllers.user_controller import (
     edit_user_by_id
 )
 
-from server.models.user_model import SignupData
+from server.models.user_model import SignupData, UpdateUserData, LoginData
 
 router = APIRouter()
 
@@ -62,4 +62,5 @@ async def delete_user(id: str, token: str):
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
+
 
