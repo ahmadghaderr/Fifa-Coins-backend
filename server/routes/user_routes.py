@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException, Header
 
 from server.controllers.user_controller import (
     handle_signup,
+    handle_login,
     get_user_by_id,
     get_all_users,
     delete_user_by_id,
@@ -62,5 +63,6 @@ async def delete_user(id: str, token: str):
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
+
 
 
