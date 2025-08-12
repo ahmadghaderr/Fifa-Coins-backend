@@ -20,6 +20,13 @@ async def signup(user: SignupData):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+@router.post("/login")
+async def login(data: LoginData):
+    try:
+        return await handle_login(data)
+    except Exception as e:
+        raise HTTPException(status_code=401, detail=str(e))
+
 @router.get("/get/{id}")
 async def get_user(id: str):
     user = await get_user_by_id(id)
@@ -63,6 +70,7 @@ async def delete_user(id: str, token: str):
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
+
 
 
 
